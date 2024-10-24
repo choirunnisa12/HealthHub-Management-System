@@ -30,9 +30,13 @@ public class Patient {
         ASURANSI
     }
 
-    @ManyToOne
-    @JoinColumn(name = "doctor_id")
-    private Doctor doctor;
+    @ManyToMany
+    @JoinTable(
+            name = "patient_doctor",
+            joinColumns = @JoinColumn(name = "patient_id"),
+            inverseJoinColumns = @JoinColumn(name = "doctor_id")
+    )
+    private List<Doctor> doctors;
 
     @ManyToOne
     @JoinColumn(name = "nurse_id")
@@ -43,6 +47,14 @@ public class Patient {
 
     @ManyToMany
     private List<Medicine> medicines;
+
+    @ManyToOne
+    @JoinColumn(name = "puskesmas_id")
+    private Puskesmas puskesmas;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }
 

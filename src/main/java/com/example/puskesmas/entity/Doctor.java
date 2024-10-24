@@ -40,6 +40,18 @@ public class Doctor {
     @JoinColumn(name = "puskesmas_id")
     private Puskesmas puskesmas;
 
+    @ManyToMany
+    @JoinTable(
+            name = "doctor_patient",
+            joinColumns = @JoinColumn(name = "doctor_id"),
+            inverseJoinColumns = @JoinColumn(name = "patient_id")
+    )
+    private List<Patient> patients;
+
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
-    private List<Patient>patients;
+    private List<MedicalRecord> medicalRecords;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

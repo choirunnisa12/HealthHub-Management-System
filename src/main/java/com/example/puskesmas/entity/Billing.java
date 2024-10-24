@@ -18,16 +18,39 @@ public class Billing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "patient")
+
+    @ManyToOne
+    @JoinColumn(name = "patient_id") // Menyimpan referensi ke pasien
     @NotNull(message = "Patient cannot be null")
-    private String patient;
+    private Patient patient; // Mengubah dari String ke Patient
+
     private BigDecimal totalAmount;
-    public enum paymentMethod {
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod; // Menggunakan enum yang didefinisikan di sini
+
+    private LocalDateTime billingDate;
+
+    // Enum untuk metode pembayaran
+    public enum PaymentMethod {
         MANDIRI,
         ASURANSI
     }
-    public enum paymentStatus{
-        PAID,UNPAID
+
+    // Enum untuk status pembayaran
+    public enum PaymentStatus {
+        PAID,
+        UNPAID
     }
-    private LocalDateTime billingDate;
+
+    @ManyToOne
+    @JoinColumn(name = "puskesmas_id")
+    private Puskesmas puskesmas;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

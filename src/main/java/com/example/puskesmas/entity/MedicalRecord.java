@@ -28,4 +28,24 @@ public class MedicalRecord {
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
+
+    @ManyToOne
+    @JoinColumn(name = "puskesmas_id")
+    private Puskesmas puskesmas;
+
+    @ManyToOne
+    @JoinColumn(name = "medicine_id")
+    private Medicine medicine;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id")
+    private Doctor doctor;
+
+    @ManyToOne
+    @JoinColumn(name = "nurse_id")
+    private Nurse nurse; // Menunjukkan perawat yang terlibat
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

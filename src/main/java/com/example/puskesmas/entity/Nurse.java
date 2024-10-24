@@ -32,6 +32,24 @@ public class Nurse {
     @Max(13)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "nurse",cascade = CascadeType.ALL)
-    private List<Patient>patients;
+    @ManyToOne
+    @JoinColumn(name = "puskesmas_id")
+    private Puskesmas puskesmas;
+
+    // Relasi Many-to-Many dengan Patient
+    @ManyToMany
+    @JoinTable(
+            name = "nurse_patient",
+            joinColumns = @JoinColumn(name = "nurse_id"),
+            inverseJoinColumns = @JoinColumn(name = "patient_id")
+    )
+    private List<Patient> patients;
+
+    // Relasi One-to-Many dengan MedicalRecord
+    @OneToMany(mappedBy = "nurse", cascade = CascadeType.ALL)
+    private List<MedicalRecord> medicalRecords;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

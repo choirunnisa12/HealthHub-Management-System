@@ -34,4 +34,25 @@ public class User {
     @Size(min = 8)
     private String password;
 
+    @ManyToOne
+    @JoinColumn(name = "puskesmas_id")
+    private Puskesmas puskesmas; // Relasi ke Puskesmas
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Doctor> doctors; // Relasi ke Doctor
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Nurse> nurses; // Relasi ke Nurse
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Patient> patients; // Relasi ke Patient
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Billing> billings; // Relasi ke Billing
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<MedicalRecord> medicalRecords; // Relasi ke MedicalRecord
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Medicine> medicines; // Relasi ke Medicine
 }

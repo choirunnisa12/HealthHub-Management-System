@@ -24,11 +24,21 @@ public class Medicine {
     private String type;
     @Column(name = "dosage")
     private String dosage;
-    @Column(name = "expirationDate")
+    @Column(name = "expiration_date")
     @Temporal(TemporalType.DATE)
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate expirationDate;
 
-    @ManyToMany
-    private List<Patient>patients;
+    // Relasi Many-to-One dengan Puskesmas
+    @ManyToOne
+    @JoinColumn(name = "puskesmas_id")
+    private Puskesmas puskesmas;
+
+    // Relasi One-to-Many dengan MedicineRecord
+    @OneToMany(mappedBy = "medicine", cascade = CascadeType.ALL)
+    private List<MedicalRecord> medicalRecords;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
