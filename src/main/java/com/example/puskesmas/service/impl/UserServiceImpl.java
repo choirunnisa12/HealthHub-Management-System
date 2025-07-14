@@ -5,7 +5,6 @@ import com.example.puskesmas.entity.User;
 import com.example.puskesmas.repository.UserRepository;
 import com.example.puskesmas.service.UserService;
 import lombok.AllArgsConstructor;
-//import org.springframework.securityrity.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,8 +12,8 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
-//    private PasswordEncoder passwordEncoder;
+
+    private final UserRepository userRepository;
 
     @Override
     public User create(RegisterUserDTO request) {
@@ -24,32 +23,40 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Username sudah ada");
         }
 
-//        // Membuat User baru dan enkripsi password
+        // Membuat User baru tanpa enkripsi password
         User newUser = new User();
-//        newUser.setUsername(request.getUsername());
-//        newUser.setPassword(passwordEncoder.encode(request.getPassword())); // Pastikan password di-hash
-//        newUser.setEmail(request.getEmail());
-//
+        newUser.setUsername(request.getUsername());
+        newUser.setPassword(request.getPassword());  // Password tanpa hashing
+        newUser.setEmail(request.getEmail());
+
         return userRepository.save(newUser);
     }
+
     @Override
     public List<User> getAll() {
-        return List.of();
+        return userRepository.findAll();
     }
 
     @Override
     public User getById(int id) {
-        return null;
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
     public User update(User user, int id) {
-        return null;
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        existingUser.setUsername(user.getUsername());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setPassword(user.getPassword());  // Password tetap tidak terenkripsi
+
+        return userRepository.save(existingUser);
     }
 
     @Override
     public void delete(int id) {
-
+        userRepository.deleteById(id);
     }
 
     @Override
