@@ -22,27 +22,23 @@ public class Puskesmas {
     @NotBlank
     private String name;
 
-    @NotBlank
     @Column(name = "address")
+    @NotBlank
     private String address;
 
+    @Column(name = "phone_number")
     @NotBlank
-    @Column(name = "phone_number") // Gunakan snake_case untuk konsistensi
     private String phoneNumber;
+
+    // ✅ Satu puskesmas bisa punya banyak user
+    @OneToMany(mappedBy = "puskesmas", cascade = CascadeType.ALL)
+    private List<User> users;
 
     @OneToMany(mappedBy = "puskesmas", cascade = CascadeType.ALL)
     private List<Doctor> doctorList;
 
-    @ManyToMany
-    @JoinTable(
-            name = "puskesmas_users",
-            joinColumns = @JoinColumn(name = "puskesmas_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private List<User> users; // Pastikan ada list untuk users
-
     @OneToMany(mappedBy = "puskesmas", cascade = CascadeType.ALL)
-    private List<Nurse> nurseList; // Hanya @OneToMany di sini
+    private List<Nurse> nurseList;
 
     @OneToMany(mappedBy = "puskesmas", cascade = CascadeType.ALL)
     private List<Billing> billings;

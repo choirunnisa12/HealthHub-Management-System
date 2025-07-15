@@ -1,16 +1,12 @@
 package com.example.puskesmas.entity;
 
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -35,24 +31,25 @@ public class User {
     private String password;
 
     @ManyToOne
-    @JoinColumn(name = "puskesmas_id")
-    private Puskesmas puskesmas; // Relasi ke Puskesmas
+    @JoinColumn(name = "puskesmas_id") // FK mengarah ke tabel puskesmas
+    private Puskesmas puskesmas;
+
+    // relasi ke entitas lain (optional)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Doctor> doctors;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Doctor> doctors; // Relasi ke Doctor
+    private List<Nurse> nurses;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Nurse> nurses; // Relasi ke Nurse
+    private List<Patient> patients;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Patient> patients; // Relasi ke Patient
+    private List<Billing> billings;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Billing> billings; // Relasi ke Billing
+    private List<MedicalRecord> medicalRecords;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<MedicalRecord> medicalRecords; // Relasi ke MedicalRecord
-
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Medicine> medicines; // Relasi ke Medicine
+    private List<Medicine> medicines;
 }
