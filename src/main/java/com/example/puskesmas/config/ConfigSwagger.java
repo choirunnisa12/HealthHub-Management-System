@@ -22,7 +22,7 @@ public class ConfigSwagger {
                         .contact(new Contact()
                                 .name("choirunnisa")
                                 .email("choirunnisaa32@gmail.com")
-                                .url("https://choirunnisa12.github.io/portfolio/")
+                                .url("https://choirunnisa12.github.io/portfolio-choirunnisa/")
                         )
                 )
                 .servers(List.of(

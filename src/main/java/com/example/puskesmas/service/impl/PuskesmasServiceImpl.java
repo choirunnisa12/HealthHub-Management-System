@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import jakarta.persistence.EntityNotFoundException;
 
 @AllArgsConstructor
 @Service
@@ -15,26 +16,34 @@ public class PuskesmasServiceImpl implements PuskesmasService {
 
     @Override
     public Puskesmas create(Puskesmas request) {
-        return null;
+        return puskesmasRepository.save(request);
     }
 
     @Override
     public List<Puskesmas> getAll() {
-        return List.of();
+        return puskesmasRepository.findAll();
     }
 
     @Override
     public Puskesmas getById(int id) {
-        return null;
+        return puskesmasRepository.findById(id).orElse(null);
     }
 
     @Override
     public Puskesmas update(Puskesmas request, int id) {
-        return null;
+        Puskesmas existing = puskesmasRepository.findById((long) id)
+            .orElseThrow(() -> new EntityNotFoundException("Puskesmas with id " + id + " not found"));
+        existing.setName(request.getName());
+        existing.setAddress(request.getAddress());
+        existing.setPhoneNumber(request.getPhoneNumber());
+        // ... update other fields as needed
+        return puskesmasRepository.save(existing);
     }
 
     @Override
     public void delete(int id) {
-
+        Puskesmas existing = puskesmasRepository.findById((long) id)
+            .orElseThrow(() -> new EntityNotFoundException("Puskesmas with id " + id + " not found"));
+        puskesmasRepository.delete(existing);
     }
 }

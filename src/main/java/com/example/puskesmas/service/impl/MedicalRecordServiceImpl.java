@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 @AllArgsConstructor
@@ -33,6 +34,9 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
 
     @Override
     public MedicalRecord update(MedicalRecord medicalRecord, int id) {
-        return null;
+        MedicalRecord existing = medicalRecordRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("MedicalRecord with id " + id + " not found"));
+        // Update fields as needed
+        return medicalRecordRepository.save(existing);
     }
 }

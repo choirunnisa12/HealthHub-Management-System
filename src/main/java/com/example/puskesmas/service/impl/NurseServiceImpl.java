@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 @AllArgsConstructor
@@ -25,16 +26,24 @@ public class NurseServiceImpl implements NurseService {
 
     @Override
     public Nurse getById(int id) {
-        return null;
+        return nurseRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Nurse with id " + id + " not found"));
     }
 
     @Override
     public Nurse update(Nurse nurse, int id) {
-        return null;
+        Nurse existing = nurseRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Nurse with id " + id + " not found"));
+        // Update fields as needed
+        existing.setName(nurse.getName());
+        // ... update other fields as needed
+        return nurseRepository.save(existing);
     }
 
     @Override
     public void delete(int id) {
-
+        Nurse existing = nurseRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Nurse with id " + id + " not found"));
+        nurseRepository.delete(existing);
     }
 }

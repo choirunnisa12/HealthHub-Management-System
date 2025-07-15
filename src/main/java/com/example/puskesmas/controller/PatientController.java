@@ -5,6 +5,9 @@ import com.example.puskesmas.entity.Patient;
 import com.example.puskesmas.service.PatientService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +24,10 @@ public class PatientController {
             }
 
             @GetMapping
-    public ResponseEntity<Patient> getAll(){
-        return new ResponseEntity<>(HttpStatus.OK);
-            }
+    public ResponseEntity<Page<Patient>> getAll(@PageableDefault(size = 10, sort = "id") Pageable pageable) {
+        Page<Patient> patients = patientService.getAll(pageable);
+        return ResponseEntity.ok(patients);
+    }
 
     @GetMapping(path = "/{id}")
     public ResponseEntity<Patient> getById(@PathVariable int id) {
