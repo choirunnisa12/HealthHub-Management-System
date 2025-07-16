@@ -36,7 +36,6 @@ public class PuskesmasServiceImpl implements PuskesmasService {
         existing.setName(request.getName());
         existing.setAddress(request.getAddress());
         existing.setPhoneNumber(request.getPhoneNumber());
-        // ... update other fields as needed
         return puskesmasRepository.save(existing);
     }
 
