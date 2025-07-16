@@ -4,15 +4,16 @@ import com.example.puskesmas.entity.Nurse;
 import com.example.puskesmas.repository.NurseRepository;
 import com.example.puskesmas.service.NurseService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class NurseServiceImpl implements NurseService {
-    private NurseRepository nurseRepository;
+    private final NurseRepository nurseRepository;
 
     @Override
     public Nurse create(Nurse nurse) {

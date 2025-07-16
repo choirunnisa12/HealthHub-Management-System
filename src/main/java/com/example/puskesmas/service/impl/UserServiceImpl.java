@@ -4,39 +4,44 @@ import com.example.puskesmas.dto.RegisterUserDTO;
 import com.example.puskesmas.entity.User;
 import com.example.puskesmas.repository.UserRepository;
 import com.example.puskesmas.service.UserService;
-import lombok.AllArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import com.example.puskesmas.security.JwtUtil;
 
-@AllArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+    private final JwtUtil jwtUtil;
 
     @Override
     public User create(RegisterUserDTO request) {
-        // Check if the username already exists in the database
-        User existingUser = userRepository.findByUsername(request.getUsername());
-        if (existingUser != null) {
-            logger.warn("Username '{}' already exists, cannot create new user", request.getUsername());
-            throw new IllegalArgumentException("Username already exists");
+        if (userRepository.existsByUsername(request.getUsername())) {
+            log.warn("Username '{}' already exists, cannot create user", request.getUsername());
+            throw new RuntimeException("Username already exists");
         }
 
-        // Create a new User with the password hashed for security
-        User newUser = new User();
-        newUser.setUsername(request.getUsername());
-        newUser.setPassword(passwordEncoder.encode(request.getPassword())); // Hash the password before saving
-        newUser.setEmail(request.getEmail());
+        User user = new User();
+        user.setUsername(request.getUsername());
+        user.setEmail(request.getEmail());
+        // Set role from DTO if provided, otherwise default to USER
+        if (request.getRole() != null) {
+            user.setRole(request.getRole());
+        } else {
+            user.setRole(User.Role.USER);
+        }
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        logger.info("Creating new user with username: {}", request.getUsername());
-        return userRepository.save(newUser);
+        log.info("Creating new user with username: {}", request.getUsername());
+        return userRepository.save(user);
     }
 
     @Override
@@ -46,43 +51,55 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(int id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
     @Override
     public User update(User user, int id) {
-        // Find the existing user by id
-        User existingUser = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-        // Update user data
+        User existingUser = getById(id);
         existingUser.setUsername(user.getUsername());
         existingUser.setEmail(user.getEmail());
-        // If the password is updated, hash it again for security
         if (user.getPassword() != null && !user.getPassword().isEmpty()) {
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            logger.info("Password for user with id {} updated and re-hashed", id);
         }
+        existingUser.setRole(user.getRole());
 
-        logger.info("Updating user data with id {}", id);
+        log.info("Updating user with id: {}", id);
         return userRepository.save(existingUser);
     }
 
     @Override
     public void delete(int id) {
-        logger.info("Deleting user with id {}", id);
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+
+        log.info("Deleting user with id: {}", id);
         userRepository.deleteById(id);
     }
 
     @Override
     public boolean validateUser(String username, String password) {
-        User user = userRepository.findByUsername(username);
-        return user != null && passwordEncoder.matches(password, user.getPassword());
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+        return optionalUser.isPresent() &&
+                passwordEncoder.matches(password, optionalUser.get().getPassword());
     }
 
     @Override
     public boolean validateEmail(String email, String password) {
-        User user = userRepository.findByEmail(email);
-        return user != null && passwordEncoder.matches(password, user.getPassword());
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        return optionalUser.isPresent() && passwordEncoder.matches(password, optionalUser.get().getPassword());
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+    }
+
+    public String generateJwtForUser(User user) {
+        // Generate JWT with username and role
+        return jwtUtil.generateToken(user.getUsername(), user.getRole().name());
     }
 }

@@ -6,40 +6,41 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@RequestMapping("/users")
+
+@RequestMapping("/api/users") // tambahkan /api biar sesuai JWT test
 @RestController
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User>create(@RequestBody User user){
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    public ResponseEntity<User> create(@RequestBody User user) {
+        User savedUser = userService.update(user, user.getId()); // gunakan metode update atau buat create khusus jika perlu
+        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<User>getAll() {
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<List<User>> getAll() {
+        return ResponseEntity.ok(userService.getAll());
     }
 
-    @GetMapping(path = "/{id}")
-    public ResponseEntity<User>getById(@PathVariable int id){
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getById(@PathVariable int id) {
         User user = userService.getById(id);
-        if (user != null){
-            return ResponseEntity.ok(user);
-        }else {
-            return ResponseEntity.notFound().build();
-        }
+        return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
-    @PutMapping
-    public ResponseEntity<User>update(@PathVariable int id, @RequestBody User user){
-        return null;
+    @PutMapping("/{id}")
+    public ResponseEntity<User> update(@PathVariable int id, @RequestBody User user) {
+        User updated = userService.update(user, id);
+        return ResponseEntity.ok(updated);
     }
 
-    @DeleteMapping
-    public ResponseEntity<User>delete(@PathVariable int id){
-        return null;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable int id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

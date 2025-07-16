@@ -6,15 +6,16 @@ import com.example.puskesmas.repository.BillingRepository;
 import com.example.puskesmas.service.BillingService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BillingServiceImpl implements BillingService {
-    private BillingRepository billingRepository;
+    private final BillingRepository billingRepository;
 
     @Override
     public Billing create(Billing billing) {

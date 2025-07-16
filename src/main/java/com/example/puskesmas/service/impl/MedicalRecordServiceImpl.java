@@ -4,6 +4,7 @@ import com.example.puskesmas.entity.MedicalRecord;
 import com.example.puskesmas.repository.MedicalRecordRepository;
 import com.example.puskesmas.service.MedicalRecordService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +12,9 @@ import java.util.Optional;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MedicalRecordServiceImpl implements MedicalRecordService {
-   private MedicalRecordRepository medicalRecordRepository;
+   private final MedicalRecordRepository medicalRecordRepository;
 
     @Override
     public MedicalRecord create(MedicalRecord medicalRecord) {
@@ -36,7 +37,6 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     public MedicalRecord update(MedicalRecord medicalRecord, int id) {
         MedicalRecord existing = medicalRecordRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("MedicalRecord with id " + id + " not found"));
-        // Update fields as needed
         return medicalRecordRepository.save(existing);
     }
 }

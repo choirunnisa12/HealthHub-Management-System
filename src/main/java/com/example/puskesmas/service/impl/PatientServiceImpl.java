@@ -4,6 +4,7 @@ import com.example.puskesmas.entity.Patient;
 import com.example.puskesmas.repository.PatientRepository;
 import com.example.puskesmas.service.PatientService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,10 +13,11 @@ import org.springframework.stereotype.Service;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
+
 @Service
 public class PatientServiceImpl implements PatientService {
-    private PatientRepository patientRepository;
+    private final PatientRepository patientRepository;
 
     @Override
     public Patient create(Patient request) {

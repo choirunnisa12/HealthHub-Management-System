@@ -1,7 +1,6 @@
 package com.example.puskesmas.security;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import com.example.puskesmas.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,8 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
-@NoArgsConstructor
 public class SecurityConfig {
 
     @Autowired
@@ -28,13 +25,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("/api/auth/register", "/api/auth/login").permitAll() // Izinkan akses ke register dan login tanpa autentikasi
+                .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
+                .requestMatchers("/api/users/**").hasRole("ADMIN")
+                .requestMatchers("/api/medical-records/**").hasAnyRole("ADMIN", "DOCTOR")
+                .requestMatchers("/api/patients/**").hasAnyRole("ADMIN", "DOCTOR", "NURSE")
                 .anyRequest().authenticated()
                 .and()
                 .addFilterBefore(new JwtFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -44,6 +44,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers("/h2-console/**");

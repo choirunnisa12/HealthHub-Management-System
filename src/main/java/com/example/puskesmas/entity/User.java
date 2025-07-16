@@ -30,6 +30,18 @@ public class User {
     @Size(min = 8)
     private String password;
 
+    public enum Role {
+        ADMIN,
+        DOCTOR,
+        NURSE,
+        PATIENT,
+        USER
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role = Role.USER;
+
     @ManyToOne
     @JoinColumn(name = "puskesmas_id") // FK mengarah ke tabel puskesmas
     private Puskesmas puskesmas;

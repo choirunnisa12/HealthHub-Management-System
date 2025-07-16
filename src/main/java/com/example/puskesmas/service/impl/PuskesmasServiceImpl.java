@@ -4,15 +4,16 @@ import com.example.puskesmas.entity.Puskesmas;
 import com.example.puskesmas.repository.PuskesmasRepository;
 import com.example.puskesmas.service.PuskesmasService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import jakarta.persistence.EntityNotFoundException;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class PuskesmasServiceImpl implements PuskesmasService {
-    private PuskesmasRepository puskesmasRepository;
+    private final PuskesmasRepository puskesmasRepository;
 
     @Override
     public Puskesmas create(Puskesmas request) {

@@ -11,7 +11,9 @@ public interface UserService {
     User getById(int id);
     User update(User user, int id);
     void delete(int id);
+
     boolean validateUser(String username, String password); // Tambahkan metode ini
     boolean validateEmail(String email, String password); // Tambahkan metode ini
-
+    User getByEmail(String email);
+    String generateJwtForUser(User user);
 }
