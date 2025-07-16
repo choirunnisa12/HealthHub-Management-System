@@ -82,6 +82,75 @@ The app will be running at http://localhost:8008
 Once running, check out the API docs at:
 - Swagger UI: http://localhost:8008/swagger-ui.html
 
+### Example: Register
+
+**Request (Valid):**
+```json
+POST /api/auth/register
+{
+  "name": "Hans Müller",
+  "email": "hans.mueller@email.com",
+  "password": "geheim123"
+}
+```
+
+**Request (Invalid):**
+```json
+POST /api/auth/register
+{
+  "name": "Ha",
+  "email": "hans.mueller",
+  "password": "123"
+}
+```
+
+**Response (Validation Error):**
+```json
+{
+  "timestamp": "2024-05-01T12:34:56.789+00:00",
+  "status": 400,
+  "errors": [
+    "Name must be between 3 and 50 characters",
+    "Email should be valid",
+    "Password must be at least 6 characters"
+  ],
+  "path": "/api/auth/register"
+}
+```
+
+### Example: Login
+
+**Request (Valid):**
+```json
+POST /api/auth/login
+{
+  "email": "hans.mueller@email.com",
+  "password": "geheim123"
+}
+```
+
+**Request (Invalid):**
+```json
+POST /api/auth/login
+{
+  "email": "hans.mueller",
+  "password": "123"
+}
+```
+
+**Response (Validation Error):**
+```json
+{
+  "timestamp": "2024-05-01T12:35:10.123+00:00",
+  "status": 400,
+  "errors": [
+    "Email should be valid",
+    "Password must be at least 6 characters"
+  ],
+  "path": "/api/auth/login"
+}
+```
+
 Main Endpoints
 
 Authentication:

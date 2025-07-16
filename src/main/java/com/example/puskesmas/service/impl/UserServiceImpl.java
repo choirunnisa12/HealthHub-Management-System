@@ -5,6 +5,9 @@ import com.example.puskesmas.entity.User;
 import com.example.puskesmas.repository.UserRepository;
 import com.example.puskesmas.service.UserService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,21 +17,25 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Override
     public User create(RegisterUserDTO request) {
-        // Cek apakah username sudah ada
+        // Check if the username already exists in the database
         User existingUser = userRepository.findByUsername(request.getUsername());
         if (existingUser != null) {
-            throw new IllegalArgumentException("Username sudah ada");
+            logger.warn("Username '{}' already exists, cannot create new user", request.getUsername());
+            throw new IllegalArgumentException("Username already exists");
         }
 
-        // Membuat User baru tanpa enkripsi password
+        // Create a new User with the password hashed for security
         User newUser = new User();
         newUser.setUsername(request.getUsername());
-        newUser.setPassword(request.getPassword());  // Password tanpa hashing
+        newUser.setPassword(passwordEncoder.encode(request.getPassword())); // Hash the password before saving
         newUser.setEmail(request.getEmail());
 
+        logger.info("Creating new user with username: {}", request.getUsername());
         return userRepository.save(newUser);
     }
 
@@ -44,30 +51,38 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User user, int id) {
+        // Find the existing user by id
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
+        // Update user data
         existingUser.setUsername(user.getUsername());
         existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword());  // Password tetap tidak terenkripsi
+        // If the password is updated, hash it again for security
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            logger.info("Password for user with id {} updated and re-hashed", id);
+        }
 
+        logger.info("Updating user data with id {}", id);
         return userRepository.save(existingUser);
     }
 
     @Override
     public void delete(int id) {
+        logger.info("Deleting user with id {}", id);
         userRepository.deleteById(id);
     }
 
     @Override
     public boolean validateUser(String username, String password) {
         User user = userRepository.findByUsername(username);
-        return user != null && user.getPassword().equals(password);
+        return user != null && passwordEncoder.matches(password, user.getPassword());
     }
 
     @Override
     public boolean validateEmail(String email, String password) {
         User user = userRepository.findByEmail(email);
-        return user != null && user.getPassword().equals(password);
+        return user != null && passwordEncoder.matches(password, user.getPassword());
     }
 }
