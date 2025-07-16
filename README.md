@@ -88,9 +88,9 @@ Once running, check out the API docs at:
 ```json
 POST /api/auth/register
 {
-  "name": "Hans Müller",
-  "email": "hans.mueller@email.com",
-  "password": "geheim123"
+  "name": "Amisha",
+  "email": "Amisha@email.com",
+  "password": "amisha123"
 }
 ```
 
@@ -98,8 +98,8 @@ POST /api/auth/register
 ```json
 POST /api/auth/register
 {
-  "name": "Ha",
-  "email": "hans.mueller",
+  "name": "am",
+  "email": "Amisha",
   "password": "123"
 }
 ```
@@ -124,8 +124,8 @@ POST /api/auth/register
 ```json
 POST /api/auth/login
 {
-  "email": "hans.mueller@email.com",
-  "password": "geheim123"
+  "email": "Amisha@email.com",
+  "password": "Amisha123"
 }
 ```
 
@@ -133,7 +133,7 @@ POST /api/auth/login
 ```json
 POST /api/auth/login
 {
-  "email": "hans.mueller",
+  "email": "Amisha",
   "password": "123"
 }
 ```
