@@ -11,6 +11,7 @@ COPY .mvn/ .mvn/
 COPY src/ src/
 
 # Build the application
+RUN chmod +x ./mvnw
 RUN ./mvnw clean package -DskipTests
 
 # Use a smaller JRE image for the final container

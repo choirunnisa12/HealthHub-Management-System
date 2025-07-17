@@ -199,7 +199,7 @@ Billing:
 - PUT /api/billings/{id} - Update billing
 - DELETE /api/billings/{id} - Remove billing
 
-## Project Structure
+## 
 
 ```
 src/main/java/com/example/healthhub
