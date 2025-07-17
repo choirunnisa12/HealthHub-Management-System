@@ -201,68 +201,75 @@ Billing:
 
 ## Project Structure
 
-src/main/java/com/example/healthhub/
-├── config/                 # App configuration
-│   └── ConfigSwagger.java
-├── controller/             # REST controllers
+```
+src/main/java/com/example/healthhub
+├── HealthHubApplication.java
+├── config/
+│   ├── ConfigSwagger.java
+│   └── GlobalExceptionHandler.java
+├── controller/
 │   ├── AuthController.java
 │   ├── BillingController.java
 │   ├── DoctorController.java
+│   ├── HealthHubController.java
 │   ├── MedicalRecordController.java
 │   ├── MedicineController.java
 │   ├── NurseController.java
 │   ├── PatientController.java
-│   ├── HealthHubController.java
 │   └── UserController.java
-├── dto/                    # Data transfer objects
+├── dto/
 │   ├── LoginUserDTO.java
 │   ├── RegisterUserDTO.java
 │   ├── request/
+│   │   ├── BillingDTO.java
+│   │   ├── LoginRequest.java
+│   │   └── RegisterRequest.java
 │   └── response/
-├── entity/                 # JPA entities
+│       └── LoginResponse.java
+├── entity/
 │   ├── Billing.java
 │   ├── Doctor.java
+│   ├── HealthHub.java
 │   ├── MedicalRecord.java
 │   ├── Medicine.java
 │   ├── Nurse.java
 │   ├── Patient.java
-│   ├── HealthHub.java
 │   └── User.java
-├── repository/             # Data access layer
+├── repository/
 │   ├── BillingRepository.java
 │   ├── DoctorRepository.java
+│   ├── HealthHubRepository.java
 │   ├── MedicalRecordRepository.java
 │   ├── MedicineRepository.java
 │   ├── NurseRepository.java
 │   ├── PatientRepository.java
-│   ├── HealthHubRepository.java
 │   └── UserRepository.java
-├── security/               # Security setup
+├── security/
 │   ├── JwtAuthenticationToken.java
 │   ├── JwtFilter.java
 │   ├── JwtUtil.java
 │   └── SecurityConfig.java
-├── service/                # Business logic
-│   ├── impl/               # Service implementations
-│   │   ├── AuthServiceImpl.java
-│   │   ├── BillingServiceImpl.java
-│   │   ├── DoctorServiceImpl.java
-│   │   ├── MedicalRecordServiceImpl.java
-│   │   ├── MedicineServiceImpl.java
-│   │   ├── NurseServiceImpl.java
-│   │   ├── PatientServiceImpl.java
-│   │   ├── HealthHubServiceImpl.java
-│   │   └── UserServiceImpl.java
-│   ├── AuthService.java
-│   ├── BillingService.java
-│   ├── DoctorService.java
-│   ├── MedicalRecordService.java
-│   ├── MedicineService.java
-│   ├── NurseService.java
-│   ├── PatientService.java
-│   ├── HealthHubService.java
-│   └── UserService.java
-└── HealthHubApplication.java
+└── service/
+    ├── AuthService.java
+    ├── BillingService.java
+    ├── DoctorService.java
+    ├── HealthHubService.java
+    ├── MedicalRecordService.java
+    ├── MedicineService.java
+    ├── NurseService.java
+    ├── PatientService.java
+    ├── UserService.java
+    └── impl/
+        ├── AuthServiceImpl.java
+        ├── BillingServiceImpl.java
+        ├── DoctorServiceImpl.java
+        ├── HealthHubServiceImpl.java
+        ├── MedicalRecordServiceImpl.java
+        ├── MedicineServiceImpl.java
+        ├── NurseServiceImpl.java
+        ├── PatientServiceImpl.java
+        └── UserServiceImpl.java
+```
 
 ## Testing
 
