@@ -1,6 +1,6 @@
-# Puskesmas Management System
+# HealthHub Management System
 
-A Spring Boot application I built for managing healthcare operations including patients, doctors, nurses, medicines, medical records, and billing. This project demonstrates my skills in building RESTful APIs with proper authentication and comprehensive testing.
+A Spring Boot application for healthcare operations, built with JWT, paging, sorting, validation,  testing with JUnit , Swagger, Lombok, and MySQL.
 
 ## Table of Contents
 
@@ -50,20 +50,20 @@ You'll need these installed on your machine:
 1. Clone and Setup
 ```bash
 git clone <repository-url>
-cd puskesmas
+cd healthhub
 ```
 
 2. Database Setup
 First, create the database:
 ```sql
-CREATE DATABASE puskesmas;
+CREATE DATABASE healthhub;
 ```
 
 Then update the database config in `src/main/resources/application.properties`:
 ```properties
 spring.datasource.username=your_username
 spring.datasource.password=your_password
-spring.datasource.url=jdbc:mysql://localhost:3306/puskesmas
+spring.datasource.url=jdbc:mysql://localhost:3306/healthhub
 ```
 
 3. Build and Run
@@ -201,7 +201,7 @@ Billing:
 
 ## Project Structure
 
-src/main/java/com/example/puskesmas/
+src/main/java/com/example/healthhub/
 ├── config/                 # App configuration
 │   └── ConfigSwagger.java
 ├── controller/             # REST controllers
@@ -212,7 +212,7 @@ src/main/java/com/example/puskesmas/
 │   ├── MedicineController.java
 │   ├── NurseController.java
 │   ├── PatientController.java
-│   ├── PuskesmasController.java
+│   ├── HealthHubController.java
 │   └── UserController.java
 ├── dto/                    # Data transfer objects
 │   ├── LoginUserDTO.java
@@ -226,7 +226,7 @@ src/main/java/com/example/puskesmas/
 │   ├── Medicine.java
 │   ├── Nurse.java
 │   ├── Patient.java
-│   ├── Puskesmas.java
+│   ├── HealthHub.java
 │   └── User.java
 ├── repository/             # Data access layer
 │   ├── BillingRepository.java
@@ -235,7 +235,7 @@ src/main/java/com/example/puskesmas/
 │   ├── MedicineRepository.java
 │   ├── NurseRepository.java
 │   ├── PatientRepository.java
-│   ├── PuskesmasRepository.java
+│   ├── HealthHubRepository.java
 │   └── UserRepository.java
 ├── security/               # Security setup
 │   ├── JwtAuthenticationToken.java
@@ -251,7 +251,7 @@ src/main/java/com/example/puskesmas/
 │   │   ├── MedicineServiceImpl.java
 │   │   ├── NurseServiceImpl.java
 │   │   ├── PatientServiceImpl.java
-│   │   ├── PuskesmasServiceImpl.java
+│   │   ├── HealthHubServiceImpl.java
 │   │   └── UserServiceImpl.java
 │   ├── AuthService.java
 │   ├── BillingService.java
@@ -260,9 +260,9 @@ src/main/java/com/example/puskesmas/
 │   ├── MedicineService.java
 │   ├── NurseService.java
 │   ├── PatientService.java
-│   ├── PuskesmasService.java
+│   ├── HealthHubService.java
 │   └── UserService.java
-└── PuskesmasApplication.java
+└── HealthHubApplication.java
 
 ## Testing
 
