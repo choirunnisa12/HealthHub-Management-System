@@ -49,7 +49,7 @@ You'll need these installed on your machine:
 
 1. Clone and Setup
 ```bash
-git clone <repository-url>
+git clone https://github.com/choirunnisa12/HealthHub-Management-System.git
 cd healthhub
 ```
 
